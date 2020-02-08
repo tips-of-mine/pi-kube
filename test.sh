@@ -76,10 +76,8 @@ else
         echo ' - Erreur'
 fi
 
-case "$dist_version" in
-#if [ $dist_version = "buster" ]
-#then
-buster)
+if [ $dist_version = "buster" ]
+then
 
 	echo '.'
 	echo '        /$$           /$$       /$$'
@@ -115,7 +113,9 @@ buster)
 	echo '**********************'
 	echo '.'
 
-	sudo killall apt apt-get
+	set -x
+	$sh_c 'docker version'
+	$sh_c 'sudo killall apt apt-get'
 
 	echo '.'   
 	echo '**********************'
@@ -123,8 +123,8 @@ buster)
 	echo '**********************'
 	echo '.'
 
-	sleep 3
-	sudo apt-get update -y
+	$sh_c 'sleep 3'
+	$sh_c 'sudo apt-get update -y'
 
 	echo '.'   
 	echo '**********************'
@@ -188,11 +188,9 @@ buster)
 		
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
-	exit 0
-	;;
-#elif  [ $dist_version = "stretch" ]
-#then
-stretch)
+	
+elif  [ $dist_version = "stretch" ]
+then
 
 	echo '.'
 	echo '        /$$           /$$       /$$'
@@ -214,22 +212,17 @@ stretch)
 	echo ' |_______/    \___/  |__/       \_______/   \___/   \_______/|__/  |__/'
 	echo '.'
 	
-	exit 0
-	;;
-#elif  [ $dist_version = "jessie" ]
-#then
-jessie)
+elif  [ $dist_version = "jessie" ]
+then
+
 	echo "jessie Unsupported OS"
-	exit 0
-	;;
-#elif  [ $dist_version = "wheezy" ]
-#then
-wheezy)
+
+elif  [ $dist_version = "wheezy" ]
+then
 	echo "wheezy Unsupported OS"
-	exit 0
-	;;
-#else
-#	echo "Other Unsupported OS"
-#	exit 1
-#fi
-esac
+
+else
+	echo "Other Unsupported OS"
+	exit 1
+fi
+
