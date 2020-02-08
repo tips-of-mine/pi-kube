@@ -113,7 +113,6 @@ then
 	echo '**********************'
 	echo '.'
 
-	set -x
 	$sh_c "sudo killall apt apt-get"
 
 	echo '.'   
