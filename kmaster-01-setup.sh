@@ -121,9 +121,23 @@ if [[ $DISTRO == debian* ]]; then
 	echo '**********************'
 	echo '.'
 	
-	sudo mkdir -p /opt/pi-kube && cd /opt/pi-kube
-
-	sudo git clone  https://github.com/tips-of-mine/pi-kube.git
+	if [ ! -d "/opt/pi-kube" ]; then
+		echo 'n existe pas'
+		cd /opt/
+		
+		sudo git clone https://github.com/tips-of-mine/pi-kube.git
+	else
+		echo 'existe'
+		sudo mkdir -p /opt/pi-kube-bakcup-file
+		
+		sudo cp /opt/pi-kube/hosts /opt/pi-kube-bakcup-file/hosts
+		
+		sudo rm -Rf /opt/pi-kube
+		
+		sudo git clone https://github.com/tips-of-mine/pi-kube.git
+		
+		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
+	fi
  
 else
 	echo "Unsupported OS"
