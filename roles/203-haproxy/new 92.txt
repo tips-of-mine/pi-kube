@@ -1,0 +1,326 @@
+Seulement pour les kmasters et deploy
+**************************************************************************************************************
+
+yum update –y 
+
+Pour tous les serveurs
+**************************************************************************************************************
+
+passwd
+
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+nano /etc/sysctl.conf
+______________________________________________________________________________________________________________Debut de modification du fichier
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+______________________________________________________________________________________________________________
+
+modprobe br_netfilter
+echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+swapoff -a
+
+nano /etc/hosts
+______________________________________________________________________________________________________________Debut de modification du fichier
+120.4.0.213     glpi            glpi.fichorgapms.local
+______________________________________________________________________________________________________________
+
+yum install epel-release nfs-utils ntp net-snmp yum-utils -y
+yum install nrpe nagios-plugins-* -y
+yum install fusioninventory-agent fusioninventory-agent-task-inventory -y
+
+systemctl disable firewalld && systemctl stop firewalld
+
+systemctl start ntpd &&  systemctl enable ntpd
+
+nano /etc/idmapd.conf
+______________________________________________________________________________________________________________Debut de modification du fichier
+Domain = connect.lan
+______________________________________________________________________________________________________________
+
+systemctl enable rpcbind && systemctl start rpcbind
+
+mv /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf.bak
+
+nano /etc/snmp/snmpd.conf
+______________________________________________________________________________________________________________Debut de modification du fichier
+#com2sec paranoid  default     FICHORGA-PUB
+com2sec readonly  default      FICHORGA-PRIV
+#com2sec readwrite default     FICHORGA-PRIV
+#group MyRWGroup usm           readwrite
+group  ROGroup   v1            readonly
+ 
+informsink 10.59.1.11 FICHORGA-PRIV
+ 
+#           incl/excl subtree      mask
+view all    included  .1           80
+view system included  .iso.org.dod.internet.mgmt.mib-2.system
+view system included  .1.3.6.1.4.1.2021.11
+view System included  .1.3.6.1.2.1.1
+view System included  .1.3.6.1.2.1.25.1.1
+ 
+####
+# Finally, grant the 2 groups access to the 1 view with different
+# write permissions:
+ 
+#                context sec.model sec.level match  read   write  notif
+access MyROSystem ""     any       noauth    exact  system none   none
+access MyROGroup ""      any       noauth    exact  all    none   none
+access MyRWGroup ""      any       noauth    exact  all    all    none
+access ROGroup  ""       v1     noauth  exact   all     none    none
+ 
+# -----------------------------------------------------------------------------
+ 
+syslocation France (configure /etc/snmp/snmpd.local.conf)
+syscontact Root <administrateur@fichorga.fr> (configure /etc/snmp/snmpd.local.conf)
+ 
+# Check the / partition and make sure it contains at least 10 megs.
+ 
+disk / 10000
+ 
+#  MUCH more can be done with the snmpd.conf than is shown as an
+#  example here.
+exec .1.3.6.1.4.1.2021.54 hdNum /usr/local/bin/snmpdiskio hdNum
+exec .1.3.6.1.4.1.2021.55 hdIndex /usr/local/bin/snmpdiskio hdIndex
+exec .1.3.6.1.4.1.2021.56 hdDescr /usr/local/bin/snmpdiskio hdDescr
+exec .1.3.6.1.4.1.2021.57 hdInBlocks /usr/local/bin/snmpdiskio hdInBlocks
+exec .1.3.6.1.4.1.2021.58 hdOutBlocks /usr/local/bin/snmpdiskio hdOutBlocks
+______________________________________________________________________________________________________________
+
+nano /etc/fusioninventory/agent.cfg
+______________________________________________________________________________________________________________Debut de modification du fichier
+server = http://glpi.fichorgapms.LOCAL/plugins/fusioninventory/
+______________________________________________________________________________________________________________
+
+nano /etc/nrpe.d/centreon.cfg
+______________________________________________________________________________________________________________Debut de modification du fichier
+################################################################################
+# COMMAND DEFINITIONS
+# Syntax:
+#       command[]=
+#
+command[users]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10
+command[load]=/usr/lib64/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[check_load]=/usr/lib64/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[swap]=/usr/lib64/nagios/plugins/check_swap -w 20% -c 10%
+command[root_disk]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p / -m
+command[usr_disk]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p /usr -m
+command[var_disk]=/usr/lib64/nagios/plugins/check_disk -w 20% -c 10% -p /var -m
+command[zombie_procs]=/usr/lib64/nagios/plugins/check_procs -w 5 -c 10 -s Z
+command[total_procs]=/usr/lib64/nagios/plugins/check_procs -w 190 -c 200
+command[proc_named]=/usr/lib64/nagios/plugins/check_procs -w 1: -c 1:2 -C named
+command[proc_crond]=/usr/lib64/nagios/plugins/check_procs -w 1: -c 1:5 -C crond
+command[proc_syslogd]=/usr/lib64/nagios/plugins/check_procs -w 1: -c 1:2 -C syslog-ng
+command[proc_rsyslogd]=/usr/lib64/nagios/plugins/check_procs -w 1: -c 1:2 -C rsyslogd
+command[check_yum]=/usr/lib64/nagios/plugins/check_yum.py
+______________________________________________________________________________________________________________
+
+nano /etc/nagios/nrpe.cfg
+______________________________________________________________________________________________________________Debut de modification du fichier
+allowed_hosts=127.0.0.1,::1,120.4.0.71,centreon,centreon.fichorgapms.local
+______________________________________________________________________________________________________________
+
+systemctl daemon-reload
+systemctl restart snmpd && systemctl enable snmpd
+systemctl restart nrpe && systemctl enable nrpe
+systemctl restart fusioninventory-agent && systemctl enable fusioninventory-agent
+
+reboot
+
+Seulement pour les kmasters
+**************************************************************************************************************
+yum install gcc pcre-static pcre-devel -y
+
+wget http://www.haproxy.org/download/2.1/src/haproxy-2.1.2.tar.gz -O ~/haproxy.tar.gz
+
+tar xzvf ~/haproxy.tar.gz -C ~/
+
+cd ~/haproxy-2.1.2
+
+make TARGET=kubernetes
+
+make install
+
+mkdir -p /etc/haproxy && mkdir -p /var/lib/haproxy 
+
+touch /var/lib/haproxy/stats
+
+ln -s /usr/local/sbin/haproxy /usr/sbin/haproxy
+
+cp ./examples/haproxy.init /etc/init.d/haproxy
+
+chmod 755 /etc/init.d/haproxy
+
+systemctl daemon-reload
+
+systemctl enable haproxy
+
+useradd -r haproxy
+
+nano /etc/haproxy/haproxy.cfg
+______________________________________________________________________________________________________________Debut de modification du fichier
+global
+   log                      /dev/log local0
+   log                      /dev/log local1 notice
+   chroot                   /var/lib/haproxy
+   pidfile                  /var/run/haproxy.pid
+   stats socket             /var/lib/haproxy/stats
+   maxconn                  5000
+   stats timeout            30s
+   user haproxy
+   group haproxy
+   daemon
+
+defaults
+    mode                    http
+    log                     global
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 5000
+
+frontend http_stats
+   bind *:8081
+   mode http
+   stats uri /haproxy?stats
+
+frontend haproxy_kube
+    bind *:6443
+    mode tcp
+    timeout client  10800s
+    default_backend kmasters
+
+backend kmasters
+    mode tcp
+    balance leastconn
+    timeout server  10800s
+    default-server inter 3s fall 3 rise 2
+    server kmaster-01 120.4.3.20:6443 check port 6443
+    server kmaster-02 120.4.3.21:6443 check port 6443
+    server kmaster-03 120.4.3.22:6443 check port 6443
+
+backend kworker
+    mode tcp
+    balance leastconn
+    timeout server  10800s
+	default-server inter 3s fall 3 rise 2
+    server kworker1 120.4.3.30
+    server kworker2 120.4.3.31
+    server kworker3 120.4.3.32
+    server kworker4 120.4.3.33
+______________________________________________________________________________________________________________
+
+systemctl start haproxy
+
+yum install -y keepalived
+
+nano /etc/keepalived/
+______________________________________________________________________________________________________________Debut de modification du fichier
+vrrp_script chk_haproxy {
+        script "killall -0 haproxy"
+        interval 2
+        weight 2
+}
+
+vrrp_instance VI_1 {
+        interface ens192
+        state MASTER
+        virtual_router_id 51
+        priority 101            # 100 on kmaster-01, 101 on kmaster-02, 103 on kmaster-03
+        virtual_ipaddress {
+            120.4.3.1        	# the virtual IP
+        }
+        track_script {
+            chk_haproxy
+        }
+}
+______________________________________________________________________________________________________________
+
+systemctl enable keepalived & systemctl start keepalived
+
+Seulement pour les kworkers
+**************************************************************************************************************
+
+mkdir -p /var/lib/docker
+mkdir -p /opt/authentic
+mkdir -p /opt/jurisweb
+mkdir -p /opt/uman-paie
+mkdir -p /opt/uman-link
+mkdir -p /opt/airmail
+mkdir -p /opt/referentiel
+mkdir -p /opt/tools
+mkdir -p /opt/certificats
+mkdir -p /etc/docker/certs.d/
+
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP /opt/authentic
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP /opt/jurisweb
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP /opt/uman-link
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/uman-paie /opt/uman-paie
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/airmail /opt/airmail
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/tools /opt/tools
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/referentiel /opt/referentiel
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/certificats /opt/certificats
+mount -t nfs -vvvv 10.120.1.5:/vol_DATA_SVM_APP/certificats /etc/docker/certs.d
+
+nano /etc/fstab
+______________________________________________________________________________________________________________Debut de modification du fichier
+10.120.1.5:/vol_DATA_SVM_APP				/opt/authentic 			nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP				/opt/jurisweb 			nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP				/opt/uman-link 			nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/uman-paie		/opt/uman-paie 			nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/airmail		/opt/airmail 			nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/referentiel	/opt/referentiel 		nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/tools			/opt/tools 				nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/certificats	/opt/certificats		nfs defaults,_netdev 0 0
+10.120.1.5:/vol_DATA_SVM_APP/certificats	/etc/docker/certs.d		nfs defaults,_netdev 0 0
+______________________________________________________________________________________________________________
+
+mount -a
+
+Seulement pour deploy
+**************************************************************************************************************
+
+nano /etc/hosts
+______________________________________________________________________________________________________________Debut de modification du fichier
+10.92.22.2      kmaster-000
+10.101.31.10    kmaster-001
+10.101.32.10    kmaster-002
+10.101.31.11    kmaster-003
+10.101.32.10    kmaster-004
+10.101.24.30    kworker-001
+10.101.25.30    kworker-002
+10.101.24.31    kworker-003
+10.101.25.31    kworker-004
+______________________________________________________________________________________________________________
+
+ssh-keygen
+
+ssh-copy-id root@kmaster-000
+ssh-copy-id root@kmaster-001
+ssh-copy-id root@kmaster-002
+ssh-copy-id root@kmaster-003
+ssh-copy-id root@kmaster-004
+ssh-copy-id root@kworker-001
+ssh-copy-id root@kworker-002
+ssh-copy-id root@kworker-003
+ssh-copy-id root@kworker-004
+
+nano /root/.ssh/known_hosts
+
+bash <(curl -s https://raw.githubusercontent.com/ilkilab/agorakube/master/setup-deploy.sh)
+
+ansible-playbook agorakube.yaml
+
+Pour tous les serveurs
+**************************************************************************************************************
+
+systemctl enable docker && systemctl start docker
+
