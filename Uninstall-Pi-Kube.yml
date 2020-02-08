@@ -1,0 +1,26 @@
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: kubeadm reset
+    shell: kubeadm reset -f
+  
+  - name: check clean docker
+    shell: docker ps -aq | wc -l
+    register: docker_container_exist
+
+  - name: clean docker
+    shell: docker rm -f $(docker ps -aq)
+    when: docker_container_exist.stdout != "0"
+
+  - name: suppression paquet kubernetes
+    apt:
+      name: 
+       - kubectl
+       - kubadm
+       - kubernetes-cni
+       - kubelet
+      purge: yes
+      autoremove: yes
+      state: absent
+
