@@ -28,14 +28,16 @@ echo ' | $$      | $$        | $$ \  $$|  $$$$$$/| $$$$$$$/| $$$$$$$$'
 echo ' |__/      |__/        |__/  \__/ \______/ |_______/ |________/'
 echo '.'
 
-if command_exists lsb_release; then
+if command_exists lsb_release
+then
 
 	set +e
 	lsb_release -a -u > /dev/null 2>&1
 	lsb_release_exit_code=$?
 	set -e
 
-	if [ "$lsb_release_exit_code" = "0" ]; then
+	if [ "$lsb_release_exit_code" = "0" ]
+	then
 
 		cat <<-EOF
 			Vous utilisez '$lsb_dist' version '$dist_version'.
@@ -48,7 +50,8 @@ if command_exists lsb_release; then
 			Upstream release is '$lsb_dist' version '$dist_version'.
 			EOF
 	else
-		if [ -r /etc/debian_version ] && [ "$lsb_dist" != "ubuntu" ] && [ "$lsb_dist" != "raspbian" ]; then
+		if [ -r /etc/debian_version ] && [ "$lsb_dist" != "ubuntu" ] && [ "$lsb_dist" != "raspbian" ]
+		then
 
 			lsb_dist=debian
 			dist_version="$(cat /etc/debian_version | sed 's/\/.*//' | sed 's/\..*//')"
@@ -73,7 +76,8 @@ else
         echo ' - Erreur'
 fi
 
-if [ $dist_version = "buster" ]; then
+if [ $dist_version = "buster" ]
+then
 
 	echo '.'
 	echo '        /$$           /$$       /$$'
@@ -163,7 +167,8 @@ if [ $dist_version = "buster" ]; then
 	echo '**********************'
 	echo '.'
 	
-	if [ ! -d "/opt/pi-kube" ]; then
+	if [ ! -d "/opt/pi-kube" ]
+	then
 		echo 'n existe pas'
 		cd /opt/
 		
@@ -180,16 +185,19 @@ if [ $dist_version = "buster" ]; then
 		
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
-elif  [ $dist_version = "stretch" ]; then
+elif  [ $dist_version = "stretch" ]
+then
 	echo "stretch Unsupported OS"
-	exit
-elif  [ $dist_version = "jessie" ]; then
+	exit 0
+elif  [ $dist_version = "jessie" ]
+then
 	echo "jessie Unsupported OS"
-	exit
-elif  [ $dist_version = "wheezy" ]; then
+	exit 0
+elif  [ $dist_version = "wheezy" ]
+then
 	echo "wheezy Unsupported OS"
-	exit
+	exit 0
 else
 	echo "Other Unsupported OS"
-	exit
+	exit 1
 fi
