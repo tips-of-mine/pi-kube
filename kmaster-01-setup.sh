@@ -39,6 +39,7 @@ fi
 # For everything else (or if above failed), just use generic identifier
 [ "$DISTRO" == "" ] && export DISTRO=$UNAME
 unset UNAME
+echo "#$DISTRO#"
 
 if [[ $DISTRO == debian* ]]; then
 
