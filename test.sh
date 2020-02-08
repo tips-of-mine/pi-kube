@@ -56,19 +56,15 @@ if command_exists lsb_release; then
 			case "$dist_version" in
 				10)
 					dist_version="buster"
-				    echo 'buster'
 				;;
 				9)
 					dist_version="stretch"
-					echo 'stretch'
 				;;
 				8|'Kali Linux 2')
 					dist_version="jessie"
-					echo 'jessie'
 				;;
 				7)
 					dist_version="wheezy"
-					echo 'wheezy'
 				;;
 			esac
 		fi
@@ -76,8 +72,6 @@ if command_exists lsb_release; then
 else
         echo ' - Erreur'
 fi
-
-echo 'etape suivante'
 
 if [ $dist_version = "buster" ]; then
 
@@ -186,7 +180,12 @@ if [ $dist_version = "buster" ]; then
 		
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
- 
+if [ $dist_version = "stretch" ]; then
+
+if [ $dist_version = "jessie" ]; then
+
+if [ $dist_version = "wheezy" ]; then
+
 else
 	echo "Unsupported OS"
 	exit
