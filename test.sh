@@ -114,8 +114,7 @@ then
 	echo '.'
 
 	set -x
-	$sh_c 'docker version'
-	$sh_c 'sudo killall apt apt-get'
+	$sh_c "sudo killall apt apt-get"
 
 	echo '.'   
 	echo '**********************'
@@ -123,8 +122,8 @@ then
 	echo '**********************'
 	echo '.'
 
-	$sh_c 'sleep 3'
-	$sh_c 'sudo apt-get update -y'
+	$sh_c "sleep 3"
+	$sh_c "sudo apt-get update -y"
 
 	echo '.'   
 	echo '**********************'
