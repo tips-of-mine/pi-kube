@@ -188,6 +188,8 @@ buster)
 		
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
+	exit 0
+	;;
 #elif  [ $dist_version = "stretch" ]
 #then
 stretch)
@@ -213,16 +215,19 @@ stretch)
 	echo '.'
 	
 	exit 0
+	;;
 #elif  [ $dist_version = "jessie" ]
 #then
 jessie)
 	echo "jessie Unsupported OS"
 	exit 0
+	;;
 #elif  [ $dist_version = "wheezy" ]
 #then
 wheezy)
 	echo "wheezy Unsupported OS"
 	exit 0
+	;;
 #else
 #	echo "Other Unsupported OS"
 #	exit 1
