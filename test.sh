@@ -181,12 +181,15 @@ if [ $dist_version = "buster" ]; then
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
 elif  [ $dist_version = "stretch" ]; then
-
+	echo "stretch Unsupported OS"
+	exit
 elif  [ $dist_version = "jessie" ]; then
-
+	echo "jessie Unsupported OS"
+	exit
 elif  [ $dist_version = "wheezy" ]; then
-
+	echo "wheezy Unsupported OS"
+	exit
 else
-	echo "Unsupported OS"
+	echo "Other Unsupported OS"
 	exit
 fi
