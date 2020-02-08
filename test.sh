@@ -76,8 +76,10 @@ else
         echo ' - Erreur'
 fi
 
-if [ $dist_version = "buster" ]
-then
+case "$dist_version" in
+#if [ $dist_version = "buster" ]
+#then
+buster)
 
 	echo '.'
 	echo '        /$$           /$$       /$$'
@@ -113,7 +115,7 @@ then
 	echo '**********************'
 	echo '.'
 
-	( set -x; $sh_c 'sudo killall apt apt-get')
+	sudo killall apt apt-get
 
 	echo '.'   
 	echo '**********************'
@@ -121,7 +123,8 @@ then
 	echo '**********************'
 	echo '.'
 
-	( set -x; $sh_c 'sleep 3; sudo apt-get update -y')
+	sleep 3
+	sudo apt-get update -y
 
 	echo '.'   
 	echo '**********************'
@@ -185,8 +188,10 @@ then
 		
 		sudo cp /opt/pi-kube-bakcup-file/hosts /opt/pi-kube/hosts
 	fi
-elif  [ $dist_version = "stretch" ]
-then
+#elif  [ $dist_version = "stretch" ]
+#then
+stretch)
+
 	echo '.'
 	echo '        /$$           /$$       /$$'
 	echo '       | $$          | $$      |__/'
@@ -208,15 +213,18 @@ then
 	echo '.'
 	
 	exit 0
-elif  [ $dist_version = "jessie" ]
-then
+#elif  [ $dist_version = "jessie" ]
+#then
+jessie)
 	echo "jessie Unsupported OS"
 	exit 0
-elif  [ $dist_version = "wheezy" ]
-then
+#elif  [ $dist_version = "wheezy" ]
+#then
+wheezy)
 	echo "wheezy Unsupported OS"
 	exit 0
-else
-	echo "Other Unsupported OS"
-	exit 1
-fi
+#else
+#	echo "Other Unsupported OS"
+#	exit 1
+#fi
+esac
