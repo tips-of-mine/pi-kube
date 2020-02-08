@@ -84,7 +84,7 @@ echo '1'
 echo $dist_version
 echo '2'
 
-if [[ $dist_version == buster* ]]; then
+if [ $dist_version == buster ]; then
 
 	echo '.'
 	echo '       /$$           /$$       /$$'
