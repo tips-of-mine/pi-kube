@@ -25,7 +25,7 @@ echo '.'
 UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 
 # If Linux, try to determine specific distribution
-if [ "$UNAME" == "linux" ]; then
+if [[ "$UNAME" == "linux" ]]; then
 	# If available, use LSB to identify distribution
 	if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
 		export DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
