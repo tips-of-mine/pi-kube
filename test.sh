@@ -29,32 +29,30 @@ echo ' |__/      |__/        |__/  \__/ \______/ |_______/ |________/'
 echo '.'
 
 if command_exists lsb_release; then
-	# Check if the `-u` option is supported
+
 	set +e
 	lsb_release -a -u > /dev/null 2>&1
 	lsb_release_exit_code=$?
 	set -e
 
-	# Check if the command has exited successfully, it means we're in a forked distro
 	if [ "$lsb_release_exit_code" = "0" ]; then
-		# Print info about current distro
+
 		cat <<-EOF
-			You're using '$lsb_dist' version '$dist_version'.
+			Vous utilisez '$lsb_dist' version '$dist_version'.
 			EOF
 
-			# Get the upstream release info
 			lsb_dist=$(lsb_release -a -u 2>&1 | tr '[:upper:]' '[:lower:]' | grep -E 'id' | cut -d ':' -f 2 | tr -d '[[:space:]]')
 			dist_version=$(lsb_release -a -u 2>&1 | tr '[:upper:]' '[:lower:]' | grep -E 'codename' | cut -d ':' -f 2 | tr -d '[[:space:]]')
 
-			# Print info about upstream distro
 			cat <<-EOF
 			Upstream release is '$lsb_dist' version '$dist_version'.
 			EOF
 	else
 		if [ -r /etc/debian_version ] && [ "$lsb_dist" != "ubuntu" ] && [ "$lsb_dist" != "raspbian" ]; then
-			# We're Debian and don't even know it!
+
 			lsb_dist=debian
 			dist_version="$(cat /etc/debian_version | sed 's/\/.*//' | sed 's/\..*//')"
+
 			case "$dist_version" in
 				10)
 					dist_version="buster"
@@ -79,11 +77,9 @@ else
         echo ' - Erreur'
 fi
 
-echo '1'
-echo $dist_version
-echo '2'
+echo 'etape suivante'
 
-if [ $dist_version == "buster*" ]; then
+if [ $dist_version = "buster" ]; then
 
 	echo '.'
 	echo '        /$$           /$$       /$$'
