@@ -1,0 +1,90 @@
+---
+- name: Verifiez la variable : delete_previous_k8s_install
+  fail:
+    msg: "La valeur de : delete_previous_k8s_install n'est pas accepte : {{ delete_previous_k8s_install }} ! Les seul valeurs accepte sont : True, False"
+  when: (delete_previous_k8s_install | string) not in ['True','False']
+
+- name: Verifier la variable : runtime
+  fail:
+    msg: "La valeur de : runtime n'est pas accepte : {{ runtime }} ! Les seul valeurs accepte sont : docker, containerd, none, false"
+  when: runtime not in ['docker','containerd','false','none']
+
+- name: Verifier la variable : network_cni_plugin
+  fail:
+    msg: "La valeur de : network_cni_plugin n'est pas accepte : {{ network_cni_plugin }} ! Les seul valeurs accepte sont : flannel, calico, none"
+  when: network_cni_plugin not in ['flannel','calico','none']
+
+- name: Verifier la variable : ngress_controller
+  fail:
+    msg: "La valeur de : ingress_controller n'est pas accepte : {{ ingress_controller }} ! Les seul valeurs accepte sont : none, traefik"
+  when: ingress_controller not in ['none','traefik','haproxy','nginx']
+
+- name: Verifier la variable : dns_server_soft
+  fail:
+    msg: "La valeur de : dns_server_soft n'est pas accepte : {{ dns_server_soft }} ! Les seul valeurs accepte sont : none, coredns"
+  when: dns_server_soft not in ['none','coredns']
+
+- name: Verifier la variable : populate_etc_hosts
+  fail:
+    msg: "La valeur de : populate_etc_hosts n'est pas accepte : {{ populate_etc_hosts }} ! Les seul valeurs accepte sont : True, False"
+  when: (populate_etc_hosts | string)  not in ['True','False']
+
+- name: Verifier la variable : k8s_dashboard
+  fail:
+    msg: "La valeur de : k8s_dashboard n'est pas accepte : {{ k8s_dashboard }} ! Les seul valeurs accepte sont : True, False"
+  when: (k8s_dashboard | string) not in ['True','False']
+
+- name: Verifier la variable : update_certs
+  fail:
+    msg: "La valeur de :  update_certs n'est pas accepte : {{ update_certs }} ! Les seul valeurs accepte sont : True, False"
+  when: (update_certs | string) not in ['True','False']
+
+- name: Verifier la variable : service_mesh
+  fail:
+    msg: "La valeur de : service_mesh n'est pas accepte : {{ service_mesh }} ! Les seul valeurs accepte sont : none, linkerd "
+  when: service_mesh not in ['none','linkerd']
+
+- name: Verifier la variable : install_helm
+  fail:
+    msg: "La valeur de : install_helm n'est pas accepte : {{ install_helm }} ! Les seul valeurs accepte sont : True, False"
+  when: (install_helm | string) not in ['True','False']
+
+- name: Verifier la variable : init_helm
+  fail:
+    msg: "La valeur de : init_helm n'est pas accepte : {{ init_helm }} ! Les seul valeurs accepte sont : True, False"
+  when: (init_helm | string) not in ['True','False']
+
+- name: Verifier la variable : cluster_cidr
+  fail:
+    msg: "La valeur de : cluster_cidr doit etre une adresse IP CIDR !"
+  when: cluster_cidr is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
+
+- name: Verifier la variable : service_cluster_ip_range
+  fail:
+    msg: "La valeur de :  service_cluster_ip_range doit etre une adresse IP CIDR !"
+  when: service_cluster_ip_range is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
+
+- name: Verifier la variable : kubernetes_service
+  fail:
+    msg: "La valeur de : kubernetes_service doit etre une adresse IP de service_cluster_ip_range !"
+  when: kubernetes_service is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
+
+- name: Verifier la variable : cluster_dns_ip
+  fail:
+    msg: "La valeur de : cluster_dns_ip doit etre une adresse IP de service_cluster_ip_range "
+  when: cluster_dns_ip is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
+
+- name: Verifier la variable : service_node_port_range
+  fail:
+    msg: "La valeur de : service_node_port_range doit etre INT-INT => exemple : 30000-32767"
+  when: service_node_port_range is not regex("(?:[+-]?(?:[0-9]+))-(?:[+-]?(?:[0-9]+))")
+
+- name: Verifier la variable : calico_mtu variable
+  fail:
+    msg: "La valeur de : calico_mtu doit etre un nombre entier !"
+  when: calico_mtu is not regex("(?:[+-]?(?:[0-9]+))")
+  
+- name: Verifier la variable : data_path variable
+  fail:
+    msg: "La valeur de : data_path doit etre un chemin de linux ! Obtenir {{ data_path }}"
+  when: data_path is not regex("^(\/[^\/ ]*)+\/?$")

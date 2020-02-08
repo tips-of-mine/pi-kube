@@ -1,0 +1,15 @@
+---
+- name: ajout des cgroups dans /boot/cmdline.txt
+  template:
+    src: cmdline.txt.j2
+    dest: /boot/cmdline.txt
+    owner: root
+    group: root
+    mode: 0755
+    
+- name: désactivation du swap
+  shell: dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove
+  ignore_errors: True
+
+- name: swapoff
+  shell: swapoff -a

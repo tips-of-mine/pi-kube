@@ -1,0 +1,12 @@
+---
+- name: Ecriture du fichier /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item].ansible_host }} {{ item }}"
+    create: yes
+  with_items:
+  - "{{ groups['all'] }}"
+  when: 
+  - 103-file-etc-hosts
+  - hostvars[item].ansible_host is defined
+

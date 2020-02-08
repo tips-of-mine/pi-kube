@@ -1,0 +1,14 @@
+---
+- hosts: all
+  any_errors_fatal: true
+  become: true
+  roles:
+    - 101-check-to-hosts
+    - 102-check-hosts-names
+    - 103-file-etc-hosts
+    
+- hosts: kmaster01
+  become: true
+  roles:
+    - 201-compliance-checks
+    - 202-pre-requis
