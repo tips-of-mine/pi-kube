@@ -80,7 +80,7 @@ else
         echo ' - Erreur'
 fi
 
-if [[ $DISTRO == buster* ]]; then
+if [[ $dist_version == buster* ]]; then
 
 	echo '.'
 	echo '       /$$           /$$       /$$'
