@@ -2,7 +2,7 @@
 - name: Verifiez le nombre de KMASTER(S)
   fail:
     msg: "Sur les KMASTER {{ MASTER_NUM }} - Le nombre de KMASTER DOIT être de 1, 3, 5 ou 7, et DEVRAIT être de 3 ou 5."
-  when: MASTER_NUM not in ['1','3','5','7']
+  when: KMASTER_NUM not in ['1','3','5','7']
   
 - name: Verifiez le nombre de ETCD
   fail:
@@ -12,4 +12,4 @@
 - name: Verifiez le nombre de KWORKER(S)
   fail:
     msg: "Sur les KWORKER {{ WORKER_NUM }} - Vous devez avoir au moins 1 KWORKER."
-  when: WORKER_NUM == '0'
+  when: KWORKER_NUM == '0'

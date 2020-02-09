@@ -14,7 +14,7 @@
     msg: "La valeur de : network_plugin n'est pas accepte : {{ network_plugin }} ! Les seul valeurs accepte sont : flannel, calico, none"
   when: network_plugin not in ['flannel','calico','none']
 
-- name: Verifier la variable : ingress_controler
+- name: Verifier la variable : ingress_controller
   fail:
     msg: "La valeur de : ingress_controler n'est pas accepte : {{ ingress_controler }} ! Les seul valeurs accepte sont : none, traefik"
   when: ingress_controler not in ['none','traefik','haproxy','nginx']
