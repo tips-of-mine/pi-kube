@@ -6,6 +6,8 @@ command_exists() {
 }
 
 echo '.'
+
+sleep 2
 echo '\n'
 echo '.'
 echo '  /$$$$$$$$ /$$$$$$ /$$$$$$$   /$$$$$$           /$$$$$$  /$$$$$$$$      /$$      /$$ /$$$$$$ /$$   /$$ /$$$$$$$$'
@@ -113,7 +115,7 @@ then
 	echo '**********************'
 	echo '.'
 
-	$sh_c "sudo killall apt apt-get"
+	sudo killall apt apt-get
 
 	echo '.'   
 	echo '**********************'
@@ -121,8 +123,7 @@ then
 	echo '**********************'
 	echo '.'
 
-	$sh_c "sleep 3"
-	$sh_c "sudo apt-get update -y"
+	sudo apt-get update -y
 
 	echo '.'   
 	echo '**********************'
