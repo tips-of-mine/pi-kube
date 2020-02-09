@@ -6,6 +6,7 @@ command_exists() {
 }
 
 echo '.'
+sleep 2
 echo '\n'
 echo '.'
 echo '  /$$$$$$$$ /$$$$$$ /$$$$$$$   /$$$$$$           /$$$$$$  /$$$$$$$$      /$$      /$$ /$$$$$$ /$$   /$$ /$$$$$$$$'
@@ -114,6 +115,8 @@ then
 	echo '.'
 
 	set -x
+	sudo killall apt apt-get
+
 	$sh_c "sudo killall apt apt-get"
 
 	echo '.'   
