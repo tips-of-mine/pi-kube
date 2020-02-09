@@ -1,48 +1,48 @@
 ---
-- name: Verifiez la variable : delete_previous_k8s_install
+- name: Verifiez la variable : delete_k8s
   fail:
-    msg: "La valeur de : delete_previous_k8s_install n'est pas accepte : {{ delete_previous_k8s_install }} ! Les seul valeurs accepte sont : True, False"
-  when: (delete_previous_k8s_install | string) not in ['True','False']
+    msg: "La valeur de : delete_k8s n'est pas accepte : {{ delete_k8s }} ! Les seul valeurs accepte sont : True, False"
+  when: (delete_k8s | string) not in ['True','False']
 
 - name: Verifier la variable : runtime
   fail:
     msg: "La valeur de : runtime n'est pas accepte : {{ runtime }} ! Les seul valeurs accepte sont : docker, containerd, none, false"
   when: runtime not in ['docker','containerd','false','none']
 
-- name: Verifier la variable : network_cni_plugin
+- name: Verifier la variable : network_plugin
   fail:
-    msg: "La valeur de : network_cni_plugin n'est pas accepte : {{ network_cni_plugin }} ! Les seul valeurs accepte sont : flannel, calico, none"
-  when: network_cni_plugin not in ['flannel','calico','none']
+    msg: "La valeur de : network_plugin n'est pas accepte : {{ network_plugin }} ! Les seul valeurs accepte sont : flannel, calico, none"
+  when: network_plugin not in ['flannel','calico','none']
 
-- name: Verifier la variable : ngress_controller
+- name: Verifier la variable : ingress_controler
   fail:
-    msg: "La valeur de : ingress_controller n'est pas accepte : {{ ingress_controller }} ! Les seul valeurs accepte sont : none, traefik"
-  when: ingress_controller not in ['none','traefik','haproxy','nginx']
+    msg: "La valeur de : ingress_controler n'est pas accepte : {{ ingress_controler }} ! Les seul valeurs accepte sont : none, traefik"
+  when: ingress_controler not in ['none','traefik','haproxy','nginx']
 
-- name: Verifier la variable : dns_server_soft
+- name: Verifier la variable : server_dns
   fail:
-    msg: "La valeur de : dns_server_soft n'est pas accepte : {{ dns_server_soft }} ! Les seul valeurs accepte sont : none, coredns"
-  when: dns_server_soft not in ['none','coredns']
+    msg: "La valeur de : server_dns n'est pas accepte : {{ server_dns }} ! Les seul valeurs accepte sont : none, coredns"
+  when: server_dns not in ['none','coredns']
 
-- name: Verifier la variable : populate_etc_hosts
+- name: Verifier la variable : file_etc_hosts
   fail:
-    msg: "La valeur de : populate_etc_hosts n'est pas accepte : {{ populate_etc_hosts }} ! Les seul valeurs accepte sont : True, False"
-  when: (populate_etc_hosts | string)  not in ['True','False']
+    msg: "La valeur de : file_etc_hosts n'est pas accepte : {{ file_etc_hosts }} ! Les seul valeurs accepte sont : True, False"
+  when: (file_etc_hosts | string)  not in ['True','False']
 
-- name: Verifier la variable : k8s_dashboard
+- name: Verifier la variable : dashboard
   fail:
-    msg: "La valeur de : k8s_dashboard n'est pas accepte : {{ k8s_dashboard }} ! Les seul valeurs accepte sont : True, False"
-  when: (k8s_dashboard | string) not in ['True','False']
+    msg: "La valeur de : dashboard n'est pas accepte : {{ dashboard }} ! Les seul valeurs accepte sont : True, False"
+  when: (dashboard | string) not in ['True','False']
 
-- name: Verifier la variable : update_certs
+- name: Verifier la variable : update_certificats
   fail:
-    msg: "La valeur de :  update_certs n'est pas accepte : {{ update_certs }} ! Les seul valeurs accepte sont : True, False"
-  when: (update_certs | string) not in ['True','False']
+    msg: "La valeur de :  update_certificats n'est pas accepte : {{ update_certificats }} ! Les seul valeurs accepte sont : True, False"
+  when: (update_certificats | string) not in ['True','False']
 
-- name: Verifier la variable : service_mesh
+- name: Verifier la variable : install_mesh
   fail:
-    msg: "La valeur de : service_mesh n'est pas accepte : {{ service_mesh }} ! Les seul valeurs accepte sont : none, linkerd "
-  when: service_mesh not in ['none','linkerd']
+    msg: "La valeur de : install_mesh n'est pas accepte : {{ install_mesh }} ! Les seul valeurs accepte sont : none, linkerd "
+  when: install_mesh not in ['none','linkerd']
 
 - name: Verifier la variable : install_helm
   fail:
