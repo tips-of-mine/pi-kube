@@ -218,6 +218,10 @@ case "$lsb_dist" in
 						did_apt_get_update=1
 					fi
 				}
+				
+				( set -x; $sh_c 'sleep 3; apt-get update' )
+				( set -x; $sh_c 'sleep 3; apt-get dist-upgrade' )
+				
 				echo '.'   
 				echo '**********************'
 				echo '* Installation de : '

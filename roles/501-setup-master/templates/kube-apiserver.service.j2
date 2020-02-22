@@ -1,0 +1,47 @@
+[Unit]
+Description=Kubernetes API Server {{ kubernetes_release }}
+Documentation=https://github.com/kubernetes/kubernetes
+{% set etcd_servers = [] %}
+{% for host in groups['etcd']  %}
+{{ etcd_servers.append( "https://"+hostvars[host].ansible_host+":2379" ) }}
+{% endfor %}
+[Service]
+ExecStart=/usr/local/bin/kubernetes/server/bin/kube-apiserver \
+  --advertise-address={{ hostvars[ansible_fqdn].ansible_host}} \
+  --allow-privileged=true \
+  --apiserver-count={{ groups['masters'] | length }} \
+  --audit-log-maxage=30 \
+  --audit-log-maxbackup=3 \
+  --audit-log-maxsize=100 \
+  --audit-log-path=/var/log/audit.log \
+  --authorization-mode=Node,RBAC \
+  --bind-address=0.0.0.0 \
+  --client-ca-file=/etc/kubernetes/pki/ca.crt \
+  --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt \
+  --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt \
+  --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key \
+  --etcd-servers={{etcd_servers|join(',')}} \
+  --event-ttl=1h \
+  --encryption-provider-config=/var/lib/kubernetes/encryption-provider-config.yaml \
+  --kubelet-certificate-authority=/etc/kubernetes/pki/ca.crt \
+  --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt \
+  --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key \
+  --kubelet-https=true \
+  --runtime-config=api/all=true \
+  --service-cluster-ip-range={{service_cluster_ip_range}} \
+  --service-node-port-range={{service_node_port_range}} \
+  --tls-cert-file=/etc/kubernetes/pki/ca.crt \
+  --tls-private-key-file=/etc/kubernetes/pki/ca.key \
+  --v=2 \
+  --requestheader-client-ca-file=/etc/kubernetes/pki/kubernetes-front-proxy-ca.crt \
+  --requestheader-allowed-names=front-proxy-client \
+  --requestheader-extra-headers-prefix=X-Remote-Extra- \
+  --requestheader-group-headers=X-Remote-Group \
+  --requestheader-username-headers=X-Remote-User \
+  --proxy-client-cert-file=/etc/kubernetes/pki/proxy/front-proxy-client.crt \
+  --proxy-client-key-file=/etc/kubernetes/pki/proxy/front-proxy-client.key
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

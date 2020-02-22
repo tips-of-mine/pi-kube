@@ -1,0 +1,37 @@
+[Unit]
+Description=Kubernetes Kubelet {{ kubernetes_release }}
+Documentation=https://github.com/kubernetes/kubernetes
+{% if runtime == 'docker' %}
+After=docker.service \
+Requires=docker.service \
+{% endif %}
+{% if runtime == 'containerd' %}
+After=containerd.service \
+Requires=containerd.service \
+{% endif %}
+
+[Service]
+{% if ansible_fqdn in groups['masters'] %}
+ExecStart=/usr/local/bin/kubernetes/server/bin/kubelet \
+{% else %}
+ExecStart=/usr/local/bin/kubernetes/node/bin/kubelet \
+{% endif %}
+  --config=/etc/kubernetes/kubelet-config.yaml \
+{% if runtime == 'docker' %}
+  --container-runtime=docker \
+{% endif %}
+{% if runtime == 'containerd' %}
+ --container-runtime=remote \
+ --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \
+{% endif %}
+  --hostname-override={{ansible_fqdn}} \
+  --image-pull-progress-deadline=2m \
+  --kubeconfig=/etc/kubernetes/manifests/kubelet.conf \
+  --network-plugin=cni \
+  --register-node=true \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

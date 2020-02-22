@@ -1,0 +1,26 @@
+---
+- name: Create tempdir
+  tempfile:
+    state: directory
+    suffix: traefik
+  register: traefik_tempdir
+  changed_when: false
+
+- name: Render templates
+  template:
+    dest: "{{ traefik_tempdir.path }}/traefik.yaml"
+    src: "../templates/traefik.yaml.j2"
+  changed_when: false
+
+- name: Apply templates
+  command: kubectl --kubeconfig {{ data_path }}/certificates/configs/admin/admin.conf apply -f {{ traefik_tempdir.path }}/traefik.yaml
+  register: apply_traefik
+  changed_when: >
+    apply_traefik.stdout is search("created")
+    or apply_traefik.stdout is search("configured")
+
+- name: Cleanup tempdir
+  file:
+    state: absent
+    path: "{{ traefik_tempdir.path }}"
+  changed_when: false

@@ -1,0 +1,3 @@
+---
+- name: Import Go install
+  include_tasks: wget-install-go.yaml

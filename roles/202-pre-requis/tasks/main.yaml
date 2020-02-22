@@ -13,3 +13,18 @@
 
 - name: swapoff
   shell: swapoff -a
+
+- name: Disable swap creation at boot
+  service:
+    name: dphys-swapfile
+    state: stopped
+    enabled: no
+  notify: disable and uninstall swap
+  
+- name: Install software for provisioning and troubleshooting
+  apt:
+    name:
+      - net-tools
+      - openssl
+      - rsync
+    state: present

@@ -1,0 +1,8 @@
+---
+- name: Delete prevous k8s binaries
+  file:
+    state: absent
+    path: /usr/local/bin/kubernetes
+  when:
+  - ansible_hostname in groups['workers']
+  - ansible_hostname not in groups['masters']

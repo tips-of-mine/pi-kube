@@ -1,13 +1,13 @@
 ---
-- name: Verifiez la variable : delete_k8s
+- name: Verifiez la variable : k8s_delete_present
   fail:
-    msg: "La valeur de : delete_k8s n'est pas accepte : {{ delete_k8s }} ! Les seul valeurs accepte sont : True, False"
-  when: (delete_k8s | string) not in ['True','False']
+    msg: "La valeur de : k8s_delete_present n'est pas accepte : {{ k8s_delete_present }} ! Les seul valeurs accepte sont : True, False"
+  when: (k8s_delete_present | string) not in ['True','False']
 
-- name: Verifier la variable : runtime
+- name: Verifier la variable : engine
   fail:
-    msg: "La valeur de : runtime n'est pas accepte : {{ runtime }} ! Les seul valeurs accepte sont : docker, containerd, none, false"
-  when: runtime not in ['docker','containerd','false','none']
+    msg: "La valeur de : engine n'est pas accepte : {{ engine }} ! Les seul valeurs accepte sont : docker, containerd, none, false"
+  when: engine not in ['docker','containerd','false','none']
 
 - name: Verifier la variable : network_plugin
   fail:
