@@ -1,7 +1,7 @@
 [deploy]
 kmaster-01.tips-of-mine.lan ansible_connection=local
 
-[masters]
+[kmasters]
 kmaster-01.tips-of-mine.lan  ansible_host=192.168.1.201
 kmaster-02.tips-of-mine.lan  ansible_host=192.168.1.202
 kmaster-03.tips-of-mine.lan  ansible_host=192.168.1.203
@@ -11,12 +11,12 @@ kmaster-01.tips-of-mine.lan  ansible_host=192.168.1.201
 kmaster-02.tips-of-mine.lan  ansible_host=192.168.1.202
 kmaster-03.tips-of-mine.lan  ansible_host=192.168.1.203
 
-[workers]
-kworker-01.tips-of-mine.lan  ansible_host=192.168.1.204
-kworker-02.tips-of-mine.lan  ansible_host=192.168.1.205
-kworker-03.tips-of-mine.lan  ansible_host=192.168.1.206
-kworker-04.tips-of-mine.lan  ansible_host=192.168.1.207
-kworker-05.tips-of-mine.lan  ansible_host=192.168.1.208
+[kworkers]
+kworker-001.tips-of-mine.lan  ansible_host=192.168.1.204
+kworker-002.tips-of-mine.lan  ansible_host=192.168.1.205
+kworker-003.tips-of-mine.lan  ansible_host=192.168.1.206
+kworker-004.tips-of-mine.lan  ansible_host=192.168.1.207
+kworker-005.tips-of-mine.lan  ansible_host=192.168.1.208
 
 [all:vars]
 vip_kmasters=192.168.1.210

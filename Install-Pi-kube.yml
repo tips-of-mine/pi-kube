@@ -6,8 +6,7 @@
     - 101-check-hosts
     - 102-hostname
     - 103-fichier-hosts
-    
-- hosts: kmaster01
+- hosts: deploy
   become: true
   roles:
     - 201-compliance-checks
