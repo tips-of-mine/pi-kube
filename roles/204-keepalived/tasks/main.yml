@@ -11,7 +11,10 @@
   run_once: true
 
 - name: Installation keepalived
-  apt: name=keepalived state=latest cache_valid_time=86400 update_cache=yes
+  apt: 
+  - name: keepalived
+    state: present
+    update_cache: yes
   tags: keepalived
   notify: restart keepalived
 
@@ -26,5 +29,7 @@
   notify: restart keepalived
 
 - name: Start keepalived
-  service: name=keepalived state=started
+  service: 
+  - name: keepalived
+    state: started
   tags: keepalived

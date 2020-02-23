@@ -1,5 +1,5 @@
 ---
-- name: ajout des cgroups dans cmdline.txt
+- name: Ajout des cgroups dans cmdline.txt
   lineinfile:
     path: /boot/cmdline.txt
     backrefs: true

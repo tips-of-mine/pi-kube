@@ -1,8 +1,8 @@
 ---
-- name: Backup des fichiers /etc/hosts
+- name: Sauvegarde des fichiers /etc/hosts
   copy:
     src: /etc/hosts
-    dest: /etc/hosts.bak
+    dest: /etc/hosts.backup
     owner: pi
     group: pi
     mode: '0644'
@@ -15,4 +15,3 @@
     create: yes
   with_items:
   - "{{ groups['all'] }}"
-

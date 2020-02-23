@@ -1,6 +1,6 @@
 ---
-- name: Verifier la conformite de l'hote
+- name: Vérifie la conformite des informations concernant les noeuds
   include_tasks: 01-infra-compliance.yaml
   
-- name: Verifier la conformite de l'hote
+- name: Vérifie la conformite des informations concernant les variables 
   include_tasks: 02-check-variables.yaml
