@@ -3,9 +3,9 @@
   any_errors_fatal: true
   become: true
   roles:
-    - 101-check-to-hosts
-    - 102-check-hosts-names
-    - 103-file-etc-hosts
+    - 101-check-hosts
+    - 102-hostname
+    - 103-fichier-hosts
     
 - hosts: kmaster01
   become: true
