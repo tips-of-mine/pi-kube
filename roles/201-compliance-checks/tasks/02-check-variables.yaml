@@ -1,90 +1,80 @@
 ---
-- name: Verifiez la variable : k8s_delete_present
+- name: Verifiez la variable k8s_delete_present
   fail:
     msg: "La valeur de : k8s_delete_present n'est pas accepte : {{ k8s_delete_present }} ! Les seul valeurs accepte sont : True, False"
   when: (k8s_delete_present | string) not in ['True','False']
 
-- name: Verifier la variable : engine
+- name: Verifier la variable engine
   fail:
     msg: "La valeur de : engine n'est pas accepte : {{ engine }} ! Les seul valeurs accepte sont : docker, containerd, none, false"
   when: engine not in ['docker','containerd','false','none']
 
-- name: Verifier la variable : network_plugin
+- name: Verifier la variable network_plugin
   fail:
     msg: "La valeur de : network_plugin n'est pas accepte : {{ network_plugin }} ! Les seul valeurs accepte sont : flannel, calico, none"
   when: network_plugin not in ['flannel','calico','none']
 
-- name: Verifier la variable : ingress_controller
+- name: Verifier la variable ingress_controle
   fail:
-    msg: "La valeur de : ingress_controler n'est pas accepte : {{ ingress_controler }} ! Les seul valeurs accepte sont : none, traefik"
-  when: ingress_controler not in ['none','traefik','haproxy','nginx']
+    msg: "La valeur de : ingress_controle n'est pas accepte : {{ ingress_controle }} ! Les seul valeurs accepte sont : none, traefik"
+  when: ingress_controle not in ['none','traefik','haproxy','nginx']
 
-- name: Verifier la variable : server_dns
+- name: Verifier la variable server_dns
   fail:
     msg: "La valeur de : server_dns n'est pas accepte : {{ server_dns }} ! Les seul valeurs accepte sont : none, coredns"
   when: server_dns not in ['none','coredns']
 
-- name: Verifier la variable : file_etc_hosts
+- name: Verifier la variable fichier_etc_hosts
   fail:
-    msg: "La valeur de : file_etc_hosts n'est pas accepte : {{ file_etc_hosts }} ! Les seul valeurs accepte sont : True, False"
-  when: (file_etc_hosts | string)  not in ['True','False']
+    msg: "La valeur de : fichier_etc_hosts n'est pas accepte : {{ fichier_etc_hosts }} ! Les seul valeurs accepte sont : True, False"
+  when: (fichier_etc_hosts | string)  not in ['True','False']
 
-- name: Verifier la variable : dashboard
+- name: Verifier la variable dashboard
   fail:
     msg: "La valeur de : dashboard n'est pas accepte : {{ dashboard }} ! Les seul valeurs accepte sont : True, False"
   when: (dashboard | string) not in ['True','False']
 
-- name: Verifier la variable : update_certificats
-  fail:
-    msg: "La valeur de :  update_certificats n'est pas accepte : {{ update_certificats }} ! Les seul valeurs accepte sont : True, False"
-  when: (update_certificats | string) not in ['True','False']
-
-- name: Verifier la variable : install_mesh
+- name: Verifier la variable install_mesh
   fail:
     msg: "La valeur de : install_mesh n'est pas accepte : {{ install_mesh }} ! Les seul valeurs accepte sont : none, linkerd "
   when: install_mesh not in ['none','linkerd']
 
-- name: Verifier la variable : install_helm
+- name: Verifier la variable install_helm
   fail:
     msg: "La valeur de : install_helm n'est pas accepte : {{ install_helm }} ! Les seul valeurs accepte sont : True, False"
   when: (install_helm | string) not in ['True','False']
 
-- name: Verifier la variable : init_helm
+- name: Verifier la variable init_helm
   fail:
     msg: "La valeur de : init_helm n'est pas accepte : {{ init_helm }} ! Les seul valeurs accepte sont : True, False"
   when: (init_helm | string) not in ['True','False']
 
-- name: Verifier la variable : cluster_cidr
+- name: Verifier la variable cluster_cidr
   fail:
     msg: "La valeur de : cluster_cidr doit etre une adresse IP CIDR !"
   when: cluster_cidr is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
 
-- name: Verifier la variable : service_cluster_ip_range
+- name: Verifier la variable service_cluster_ip_range
   fail:
     msg: "La valeur de :  service_cluster_ip_range doit etre une adresse IP CIDR !"
   when: service_cluster_ip_range is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
 
-- name: Verifier la variable : kubernetes_service
+- name: Verifier la variable k8s_service
   fail:
-    msg: "La valeur de : kubernetes_service doit etre une adresse IP de service_cluster_ip_range !"
-  when: kubernetes_service is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
+    msg: "La valeur de : k8s_service doit etre une adresse IP de service_cluster_ip_range !"
+  when: k8s_service is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
 
-- name: Verifier la variable : cluster_dns_ip
+- name: Verifier la variable cluster_dns_ip
   fail:
     msg: "La valeur de : cluster_dns_ip doit etre une adresse IP de service_cluster_ip_range "
   when: cluster_dns_ip is not regex("^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$")
 
-- name: Verifier la variable : service_node_port_range
+- name: Verifier la variable service_node_port_range
   fail:
     msg: "La valeur de : service_node_port_range doit etre INT-INT => exemple : 30000-32767"
   when: service_node_port_range is not regex("(?:[+-]?(?:[0-9]+))-(?:[+-]?(?:[0-9]+))")
 
-- name: Verifier la variable : calico_mtu variable
-  fail:
-    msg: "La valeur de : calico_mtu doit etre un nombre entier !"
-  when: calico_mtu is not regex("(?:[+-]?(?:[0-9]+))")
-  
-- name: Verifier la variable : data_path variable
+- name: Verifier la variable data_path variable
   fail:
     msg: "La valeur de : data_path doit etre un chemin de linux ! Obtenir {{ data_path }}"
   when: data_path is not regex("^(\/[^\/ ]*)+\/?$")

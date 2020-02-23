@@ -1,11 +1,12 @@
 global
         log /dev/log    local0
         log /dev/log    local1 notice
-        chroot /var/lib/haproxy
-        stats socket /run/haproxy/admin.sock mode 660 level admin
-        stats timeout 30s
-        user haproxy
-        group haproxy
+        pidfile         /var/run/haproxy.pid
+        stats socket    /var/lib/haproxy/stats
+		maxconn         5000
+        stats timeout   30s
+        user            haproxy
+        group           haproxy
         daemon
 
         # Default SSL material locations
@@ -36,6 +37,11 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
+frontend http_stats
+        bind *:8081
+        mode http
+        stats uri /haproxy?stats
+   
 frontend kubeapiserver
         mode tcp
         option tcplog
@@ -47,6 +53,6 @@ backend kubeapiserver
         option tcplog
         option tcp-check
         balance roundrobin
-{% for master_host in groups['masters']: %}
-        server {{ master_host }} {{ master_host }}:6443 check
+{% for kmasters_host in groups['kmasters']: %}
+        server {{ kmaster_host }} {{ kmaster_host }}:6443 check
 {% endfor %}

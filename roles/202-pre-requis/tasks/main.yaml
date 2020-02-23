@@ -1,30 +1,33 @@
 ---
-- name: ajout des cgroups dans /boot/cmdline.txt
-  template:
-    src: cmdline.txt.j2
-    dest: /boot/cmdline.txt
-    owner: root
-    group: root
-    mode: 0755
+- name: ajout des cgroups dans cmdline.txt
+  lineinfile:
+    path: /boot/cmdline.txt
+    backrefs: true
+    regexp: '^(.*rootwait)$'
+    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     
 - name: désactivation du swap
-  shell: dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove
+  shell: swapoff -a && dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove
   ignore_errors: True
 
-- name: swapoff
-  shell: swapoff -a
-
-- name: Disable swap creation at boot
-  service:
-    name: dphys-swapfile
-    state: stopped
-    enabled: no
-  notify: disable and uninstall swap
-  
-- name: Install software for provisioning and troubleshooting
+- name: Installer des logiciels pour l'approvisionnement et le dépannage
   apt:
     name:
       - net-tools
       - openssl
       - rsync
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Add apt key for kubectl
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+    
+- name: Ajout repository [deb https://apt.kubernetes.io/ kubernetes-xenial main]
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present

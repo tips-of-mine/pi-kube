@@ -1,4 +1,13 @@
 ---
+- name: Backup des fichiers /etc/hosts
+  copy:
+    src: /etc/hosts
+    dest: /etc/hosts.bak
+    owner: pi
+    group: pi
+    mode: '0644'
+    backup: yes
+    
 - name: Ecriture dans le fichier /etc/hosts
   lineinfile:
     path: /etc/hosts

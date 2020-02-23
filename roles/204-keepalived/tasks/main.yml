@@ -5,7 +5,7 @@
   set_fact:
     keepalived_master_ip: "{{ play_hosts|map('extract', hostvars,['ansible_eth0','ipv4','address'])|list|sort(reverse=true)|first }}"
 
-- name: Vedi IP Master
+- name: Voir IP KMaster
   debug:
     var: keepalived_master_ip
   run_once: true
@@ -16,7 +16,12 @@
   notify: restart keepalived
 
 - name: Configuration de keepalived
-  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  template: 
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: 0644
+    owner: pi
+    group: pi
   tags: keepalived
   notify: restart keepalived
 

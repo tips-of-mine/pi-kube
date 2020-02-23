@@ -26,3 +26,8 @@ sudo ssh-copy-id pi@kworker-004
 sudo ssh-copy-id pi@kworker-005
 
 sudo ansible-playbook Install-Pi-kube.yml
+
+http://192.168.1.201:8081/haproxy?stats
+
+
+sudo ansible-playbook Uninstall-Pi-Kube.yml

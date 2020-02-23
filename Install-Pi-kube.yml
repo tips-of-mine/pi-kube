@@ -11,3 +11,5 @@
   roles:
     - 201-compliance-checks
     - 202-pre-requis
+    - 203-haproxy
+    - 204-keepalived

@@ -4,7 +4,7 @@ cn_root_ca: Tips-of-mine
 c: FR
 st: Nord
 l: Roubaix
-expiry: 8767h
+expiry: 87672h
 rotate_certs_pki: false
 rotate_full_pki: false
 
@@ -29,22 +29,19 @@ k8s_proxy_ipvs_algotithm: rr
 engine: docker
 network_plugin: flannel
 flannel_iface: default
-ingress_controller: traefik
-dns_server_soft: coredns
-populate_etc_hosts: yes
-k8s_dashboard: True
-service_mesh: linkerd
+ingress_controle: traefik
+server_dns: coredns
+fichier_etc_hosts: yes
+dashboard: True
+install_mesh: linkerd
 linkerd_release: stable-2.6.0
 install_helm: false
 init_helm: false
-
-# Calico
-calico_mtu: 1440
 
 # Security
 encrypt_key_etcd: 1fJcKt6vBxMt+AkBanoaxFF2O6ytHIkETNgQWv4b/+Q=
 
 # Data Directory
-data_path: "/opt/agorakube"
+data_path: "/opt/pi-kube"
 etcd_data_directory: "/var/lib/etcd"
 #restoration_snapshot_file: /path/snopshot/file Located on {{ etcd_data_directory }}

@@ -20,7 +20,18 @@
        - kubadm
        - kubernetes-cni
        - kubelet
+       - haproxy
+       - keepalived
       purge: yes
       autoremove: yes
       state: absent
 
+- name: Restauration des fichiers /etc/hosts
+  copy:
+    src: /etc/hosts.bak
+    dest: /etc/hosts
+    owner: pi
+    group: pi
+    mode: '0644'
+    backup: yes
+    
