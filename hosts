@@ -1,26 +1,25 @@
 [deploy]
-kmaster-01.exemple.lan ansible_connection=local
+kmaster-01.tips-of-mine.lan ansible_connection=local
 
 [masters]
-kmaster-01.exemple.lan  ansible_host=192.168.1.201
-kmaster-02.exemple.lan  ansible_host=192.168.1.202
-kmaster-03.exemple.lan  ansible_host=192.168.1.203
+kmaster-01.tips-of-mine.lan  ansible_host=192.168.1.201
+kmaster-02.tips-of-mine.lan  ansible_host=192.168.1.202
+kmaster-03.tips-of-mine.lan  ansible_host=192.168.1.203
 
 [etcd]
-kmaster-01.exemple.lan  ansible_host=192.168.1.201
-kmaster-02.exemple.lan  ansible_host=192.168.1.202
-kmaster-03.exemple.lan  ansible_host=192.168.1.203
+kmaster-01.tips-of-mine.lan  ansible_host=192.168.1.201
+kmaster-02.tips-of-mine.lan  ansible_host=192.168.1.202
+kmaster-03.tips-of-mine.lan  ansible_host=192.168.1.203
 
 [workers]
-kworker-01.exemple.lan  ansible_host=192.168.1.204
-kworker-02.exemple.lan  ansible_host=192.168.1.205
-kworker-03.exemple.lan  ansible_host=192.168.1.206
-kworker-04.exemple.lan  ansible_host=192.168.1.207
-kworker-05.exemple.lan  ansible_host=192.168.1.208
+kworker-01.tips-of-mine.lan  ansible_host=192.168.1.204
+kworker-02.tips-of-mine.lan  ansible_host=192.168.1.205
+kworker-03.tips-of-mine.lan  ansible_host=192.168.1.206
+kworker-04.tips-of-mine.lan  ansible_host=192.168.1.207
+kworker-05.tips-of-mine.lan  ansible_host=192.168.1.208
 
 [all:vars]
-advertise_ip_masters=192.168.1.210
-vip_masters=192.168.1.210
+vip_kmasters=192.168.1.210
 
 # SSH connection settings
 ansible_user=pi

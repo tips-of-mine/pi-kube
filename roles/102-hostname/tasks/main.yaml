@@ -1,5 +1,5 @@
 ---
-- name: test les nodes
+- name: test la présence des noeuds
   assert:
     that:
       ansible_fqdn == inventory_hostname
